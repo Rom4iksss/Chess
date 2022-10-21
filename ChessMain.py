@@ -32,14 +32,43 @@ def main():
     screen.fill(p.Color('white'))
     gs = CE.GameState()
     load_images() #only do this once, before the while loop
-    running = True
+    running = True   
     while running:
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
-        
+        draw_game_state(screen, gs)
         clock.tick(MAX_FPS)
         p.display.flip()
-    
+
+'''
+Responsible for all the graphics within a current game state.
+'''
+def draw_game_state(screen, gs):
+    draw_board(screen) #draw squares on the board
+    #add in piece highlighting or move suggestions (later)
+    draw_pieces(screen, gs.board) #draw pieces on top of those squares
+
+'''
+Draw the squares on the board.
+'''
+def draw_board(screen):
+    colors = [p.Color('white'), p.Color('light green')]
+    for r in range(DIMENSION):
+        for c in range(DIMENSION):
+            color = colors[((r + c)%2)]
+            p.draw.rect(screen, color, p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+'''
+Draw the pieces on the board using the current game_state
+'''      
+def draw_pieces(screen, board):
+    for r in range(DIMENSION):
+        for c in range(DIMENSION):
+            piece = board[r][c]
+            if piece != "--": #not empty square
+                screen.blit(IMAGES[piece], p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))    
+        
+
 if __name__ == '__main__':
     main()
