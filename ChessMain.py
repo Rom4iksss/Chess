@@ -41,6 +41,7 @@ def main():
         for e in p.event.get():
             if e.type == p.QUIT:
                 running = False
+            #mouse handler
             elif e.type == p.MOUSEBUTTONDOWN:
                 location = p.mouse.get_pos() #(x, y) location of mouse
                 col = location[0] // SQ_SIZE
@@ -55,7 +56,11 @@ def main():
                     print(move.get_chess_notation())
                     gs.make_move(move)
                     sq_selected = () #reset user clicks
-                    player_clicks = []                    
+                    player_clicks = []  
+            #key handlers
+            elif e.type == p.KEYDOWN:
+                if e.key == p.K_z:
+                    gs.undo_move()                  
                     
         draw_game_state(screen, gs)
         clock.tick(MAX_FPS)
