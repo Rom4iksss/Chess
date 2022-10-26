@@ -41,9 +41,45 @@ class GameState():
             self.board[move.start_row][move.start_col] = move.piece_moved
             self.board[move.end_row][move.end_col] = move.piece_captured
             self.white_to_move = not self.white_to_move #switch turns back
-                
+            
     
-                
+    def get_valid_moves(self):
+        '''
+        All moves considering checks
+        '''
+        return self.get_all_possible_moves()
+    
+    
+    def get_all_possible_moves(self):
+        '''
+        All moves without considering checks
+        '''
+        moves = []
+        for row in range(len(self.board)):
+            for col in range(len(self.board[row])):
+                turn = self.board[row][col][0] #represent color of the piece
+                if (turn == 'w' and self.white_to_move) or (turn == 'b' and not self.white_to_move):
+                    piece = self.board[row][col][1]
+                    if piece == 'p':
+                        self.get_pawn_moves(row, col, moves)
+                    elif piece == 'R':
+                        self.get_rook_moves(row, col, moves)
+        return moves
+                        
+                        
+    def get_pawn_moves(self, row, col, moves):
+        '''
+        Get all the pawn moves for the pawn located at row, col and add these moves to the list
+        '''
+        pass
+
+    def get_rook_moves(self, row, col, moves):
+        '''
+        Get all the rook moves for the rook located at row, col and add these moves to the list
+        '''
+        pass
+    
+    
 class Move():
     # maps keys to values
     # key : value
@@ -61,11 +97,21 @@ class Move():
         self.end_col = end_sq[1]
         self.piece_moved = board[self.start_row][self.start_col]
         self.piece_captured = board[self.end_row][self.end_col]
+        self.move_id = self.start_row*1000 + self.start_col*100 + self.end_row*10 + self.end_col
         
+
+    def __eq__(self, other):
+        '''
+        Overriding the equals method 
+        '''
+        if isinstance(other, Move):
+            return self.move_id == other.move_id
+        return False
 
     def get_chess_notation(self):
         # you can add to make this like real chesss notation
         return self.get_rank_file(self.start_row, self.start_col) + self.get_rank_file(self.end_row, self.end_col)
+    
     
     def get_rank_file(self, r, c):
         return self.cols_to_files[c] + self.rows_to_ranks[r]
