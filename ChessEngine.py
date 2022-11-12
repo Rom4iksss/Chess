@@ -12,7 +12,7 @@ class GameState():
             ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
             ['bp', 'bp', 'bp', 'bp', 'bp', 'bp', 'bp', 'bp'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
-            ['--', '--', 'bR', '--', '--', '--', '--', '--'],
+            ['--', '--', 'bQ', '--', '--', 'wQ', '--', '--'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
             ['wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp'],
@@ -101,7 +101,7 @@ class GameState():
         '''
         move = ['w', 'b'][self.white_to_move] #for captures (if True white moves and black could be captured)
         new_row = row #for not to change start row position in while
-        while new_row+1 < len(self.board): #
+        while new_row+1 < len(self.board): #row moving
             new_row += 1
             if self.board[new_row][col] != '--':
                 if self.board[new_row][col][0] == move:
@@ -109,7 +109,7 @@ class GameState():
                 break
             moves.append(Move((row, col), (new_row, col), self.board))
         new_row = row #update new row
-        while new_row-1 >= 0:
+        while new_row-1 >= 0: #row moving
             new_row -= 1
             if self.board[new_row][col] != '--':
                 if self.board[new_row][col][0] == move:
@@ -118,7 +118,7 @@ class GameState():
             moves.append(Move((row, col), (new_row, col), self.board))   
             
         new_col = col #for not to change start col position in while
-        while new_col+1 < len(self.board):
+        while new_col+1 < len(self.board): #col moving
             new_col += 1
             if self.board[row][new_col] != '--':
                 if self.board[row][new_col][0] == move:
@@ -126,7 +126,7 @@ class GameState():
                 break
             moves.append(Move((row, col), (row, new_col), self.board))
         new_col = col #update new col
-        while new_col-1 >= 0:
+        while new_col-1 >= 0: #col moving
             new_col -= 1
             if self.board[row][new_col] != '--':
                 if self.board[row][new_col][0] == move:
@@ -147,14 +147,56 @@ class GameState():
         '''
         Get all the bishop moves for the bishop located at row, col and add these moves to the list
         '''
-        pass
-    
+        move = ['w', 'b'][self.white_to_move] #for captures (if True white moves and black could be captured)
+        new_row = row #for not to change start row position in while
+        new_col = col #for not to change start col position in while
+        while new_row+1 < len(self.board) and new_col+1 < len(self.board): 
+            new_row += 1
+            new_col += 1
+            if self.board[new_row][new_col] != '--':
+                if self.board[new_row][new_col][0] == move:
+                    moves.append(Move((row, col), (new_row, new_col), self.board))
+                break
+            moves.append(Move((row, col), (new_row, new_col), self.board))
+        new_row = row #update new row
+        new_col = col #update new col
+        while new_row-1 >= 0 and new_col-1 >= 0: 
+            new_row -= 1
+            new_col -= 1
+            if self.board[new_row][new_col] != '--':
+                if self.board[new_row][new_col][0] == move:
+                    moves.append(Move((row, col), (new_row, new_col), self.board))
+                break
+            moves.append(Move((row, col), (new_row, new_col), self.board)) 
+              
+        new_row = row #for not to change start row position in while
+        new_col = col #for not to change start col position in while
+        while new_col+1 < len(self.board) and new_row-1 >= 0: 
+            new_col += 1
+            new_row -= 1
+            if self.board[new_row][new_col] != '--':
+                if self.board[new_row][new_col][0] == move:
+                    moves.append(Move((row, col), (new_row, new_col), self.board))
+                break
+            moves.append(Move((row, col), (new_row, new_col), self.board))
+        new_row = row #update new row
+        new_col = col #update new col
+        while new_col-1 >= 0 and new_row+1 < len(self.board): 
+            new_col -= 1
+            new_row += 1
+            if self.board[new_row][new_col] != '--':
+                if self.board[new_row][new_col][0] == move:
+                    moves.append(Move((row, col), (new_row, new_col), self.board))
+                break
+            moves.append(Move((row, col), (new_row, new_col), self.board)) 
+        
     
     def get_queen_moves(self, row, col, moves):
         '''
         Get all the queen moves for the queen located at row, col and add these moves to the list
         '''
         self.get_rook_moves(row, col, moves)
+        self.get_bishop_moves(row, col, moves)
 
 
     def get_king_moves(self, row, col, moves):
