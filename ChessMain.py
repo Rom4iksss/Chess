@@ -35,7 +35,6 @@ def main():
     gs = CE.GameState()
     valid_moves = gs.get_valid_moves()
     move_made = False #flag varible for whet a move is made
-    
     load_images() #only do this once, before the while loop
     running = True
     sq_selected = () #no square is selected, keep track of the last click of the user (tuple: (row, col))
@@ -49,6 +48,7 @@ def main():
                 location = p.mouse.get_pos() #(x, y) location of mouse
                 col = location[0] // SQ_SIZE
                 row = location[1] // SQ_SIZE
+                '''wanna add move points prompt'''
                 if sq_selected == (row, col): #the user clicked the same square twice
                     sq_selected = () #deselect
                 else:

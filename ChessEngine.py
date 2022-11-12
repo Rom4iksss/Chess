@@ -12,7 +12,7 @@ class GameState():
             ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
             ['bp', 'bp', 'bp', 'bp', 'bp', 'bp', 'bp', 'bp'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
-            ['--', '--', '--', '--', '--', '--', '--', '--'],
+            ['--', '--', 'bR', '--', '--', '--', '--', '--'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
             ['--', '--', '--', '--', '--', '--', '--', '--'],
             ['wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp', 'wp'],
@@ -99,7 +99,41 @@ class GameState():
         '''
         Get all the rook moves for the rook located at row, col and add these moves to the list
         '''
-        pass
+        move = ['w', 'b'][self.white_to_move] #for captures (if True white moves and black could be captured)
+        new_row = row #for not to change start row position in while
+        while new_row+1 < len(self.board): #
+            new_row += 1
+            if self.board[new_row][col] != '--':
+                if self.board[new_row][col][0] == move:
+                    moves.append(Move((row, col), (new_row, col), self.board))
+                break
+            moves.append(Move((row, col), (new_row, col), self.board))
+        new_row = row #update new row
+        while new_row-1 >= 0:
+            new_row -= 1
+            if self.board[new_row][col] != '--':
+                if self.board[new_row][col][0] == move:
+                    moves.append(Move((row, col), (new_row, col), self.board))
+                break
+            moves.append(Move((row, col), (new_row, col), self.board))   
+            
+        new_col = col #for not to change start col position in while
+        while new_col+1 < len(self.board):
+            new_col += 1
+            if self.board[row][new_col] != '--':
+                if self.board[row][new_col][0] == move:
+                    moves.append(Move((row, col), (row, new_col), self.board))
+                break
+            moves.append(Move((row, col), (row, new_col), self.board))
+        new_col = col #update new col
+        while new_col-1 >= 0:
+            new_col -= 1
+            if self.board[row][new_col] != '--':
+                if self.board[row][new_col][0] == move:
+                    moves.append(Move((row, col), (row, new_col), self.board))
+                break
+            moves.append(Move((row, col), (row, new_col), self.board))   
+        
 
 
     def get_knight_moves(self, row, col, moves):
@@ -120,7 +154,7 @@ class GameState():
         '''
         Get all the queen moves for the queen located at row, col and add these moves to the list
         '''
-        pass
+        self.get_rook_moves(row, col, moves)
 
 
     def get_king_moves(self, row, col, moves):
